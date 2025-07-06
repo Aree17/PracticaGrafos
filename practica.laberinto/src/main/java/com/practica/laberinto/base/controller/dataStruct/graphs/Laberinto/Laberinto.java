@@ -133,10 +133,10 @@ public class Laberinto {
         Laberinto p = new Laberinto();
         char[][] matriz = p.Laberinto(20, 20);
         imprimirLaberinto(matriz);
-
         UndirectedLabelGraph<String> grafo = UndirectedLabelGraph.mazeToGraph(matriz);
-
         float[][] matrizAdy = grafo.getMatrizAdyacencia();
+        Dijkstra.dijkstra(matrizAdy, 0);
+        // O la etiqueta para el fin
 
         // System.out.println(grafo.toString());
 
