@@ -18,17 +18,6 @@ public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
         }
     }
 
-    public void matriz(int row, int column) {
-        StringBuilder s = new StringBuilder(column);
-        for (int i = 0; i < column; i++) {
-            s.append('0');
-        }
-        char[][] maz = new char[row][column];
-        for (int x = 0; x < row; x++) {
-            maz[x] = s.toString().toCharArray();
-        }
-    }
-
     public static UndirectedLabelGraph<String> mazeToGraph(char[][] maze) {
         int rows = maze.length;
         int cols = maze[0].length;
