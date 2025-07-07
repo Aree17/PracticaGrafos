@@ -1,7 +1,5 @@
 package com.practica.laberinto.base.controller.dataStruct.graphs.Laberinto;
 
-import com.practica.laberinto.base.controller.dataStruct.queue.Queue;
-
 import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 
 public class Dijkstra {
