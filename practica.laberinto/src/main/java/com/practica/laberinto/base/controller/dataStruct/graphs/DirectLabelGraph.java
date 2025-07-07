@@ -9,7 +9,7 @@ import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 public class DirectLabelGraph<E> extends DirectedGraph<E>{
 
     protected E labels[];
-    protected HashMap<E, Integer> dictVertex; // a cada vertice le voy a asignar un objeto
+    protected HashMap<E, Integer> dictVertex; 
     private Class clazz;
 
     public DirectLabelGraph(Integer nro_vertex, Class clazz) {
@@ -27,13 +27,13 @@ public class DirectLabelGraph<E> extends DirectedGraph<E>{
 
     public void insert_label(E o, E d, Float weight){
         if(isLabelsGraph()){
-            insert(getVertex(o), getVertex(d), weight); // retorno vertice asociado
+            insert(getVertex(o), getVertex(d), weight); 
         }
     }
 
     public void insert_label(E o, E d){
         if(isLabelsGraph()){
-            insert(getVertex(o), getVertex(d), Float.NaN); // retorno vertice asociado
+            insert(getVertex(o), getVertex(d), Float.NaN); 
         }
     }
 
@@ -65,7 +65,7 @@ public class DirectLabelGraph<E> extends DirectedGraph<E>{
 
     public E getLabel(Integer i){
         //return dictVertex.get(i);
-        return labels[i]; //obtener la etiqueta del vertice
+        return labels[i]; 
 
     }
 
