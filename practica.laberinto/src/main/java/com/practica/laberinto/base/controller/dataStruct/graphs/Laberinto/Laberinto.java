@@ -1,16 +1,13 @@
 package com.practica.laberinto.base.controller.dataStruct.graphs.Laberinto;
 
-import java.util.ArrayList;
-
 import com.practica.laberinto.base.controller.dataStruct.graphs.UndirectedLabelGraph;
+import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 
 public class Laberinto {
 
-    public String generar(int r, int c) {
-        // dimensions of generated maze
-        // int r = 100, c = 100;
+    public String generar(int r, int c) throws Exception {
 
-        // build maze and initialize with only walls
+        // construir laberinto e inicializar con paredes
         StringBuilder s = new StringBuilder(c);
         for (int x = 0; x < c; x++) {
             s.append('0');
@@ -20,70 +17,70 @@ public class Laberinto {
             maz[x] = s.toString().toCharArray();
         }
 
-        // select random point and open as start node
+        // seleccionar un punto de inicio aleatorio y escogerlo como nodo inicial
         Point st = new Point((int) (Math.random() * r), (int) (Math.random() * c), null);
         maz[st.r][st.c] = 'S';
 
-        // iterate through direct neighbors of node
-        ArrayList<Point> frontier = new ArrayList<Point>();
+        // iterar a los vecinos cercanos al nodo inicial
+        LinkedList<Point> frontier = new LinkedList<Point>();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0 || x != 0 && y != 0) {
                     continue;
                 }
-                try {
-                    if (maz[st.r + x][st.c + y] == '1') {
+                int newR = st.r + x;
+                int newC = st.c + y;
+                if (newR >= 0 && newR < r && newC >= 0 && newC < c) { // Validación de límites
+                    if (maz[newR][newC] == '1') {
                         continue;
                     }
-                } catch (Exception e) { // ignore ArrayIndexOutOfBounds
-                    continue;
+                    frontier.add(new Point(newR, newC, st));
                 }
-                // add eligible points to frontier
-                frontier.add(new Point(st.r + x, st.c + y, st));
             }
         }
 
         Point last = null;
         while (!frontier.isEmpty()) {
 
-            // pick current node at random
-            Point cu = frontier.remove((int) (Math.random() * frontier.size()));
+            // escoger un nodo aleatorio de la frontera
+            Point cu = frontier.delete((int) (Math.random() * frontier.getLength()));
             Point op = cu.opposite();
             try {
-                // if both node and its opposite are walls
-                if (maz[cu.r][cu.c] == '0') {
-                    if (maz[op.r][op.c] == '0') {
+                // si el nodo y su opuesto son paredes
+                if (cu.r >= 0 && cu.r < r && cu.c >= 0 && cu.c < c && // Validación de límites
+                    op.r >= 0 && op.r < r && op.c >= 0 && op.c < c && // Validación de límites
+                    maz[cu.r][cu.c] == '0' && maz[op.r][op.c] == '0') {
 
-                        // open path between the nodes
-                        maz[cu.r][cu.c] = '1';
-                        maz[op.r][op.c] = '1';
+                    // abrir camino entre ambos nodos
+                    maz[cu.r][cu.c] = '1';
+                    maz[op.r][op.c] = '1';
 
-                        // store last node in order to mark it later
-                        last = op;
+                    // almacenar el nodo como último visitado
+                    last = op;
 
-                        // iterate through direct neighbors of node, same as earlier
-                        for (int x = -1; x <= 1; x++) {
-                            for (int y = -1; y <= 1; y++) {
-                                if (x == 0 && y == 0 || x != 0 && y != 0) {
+                    // volver a iterar con los vecinos del nodo actual
+                    for (int x = -1; x <= 1; x++) {
+                        for (int y = -1; y <= 1; y++) {
+                            if (x == 0 && y == 0 || x != 0 && y != 0) {
+                                continue;
+                            }
+                            int newR = op.r + x;
+                            int newC = op.c + y;
+                            if (newR >= 0 && newR < r && newC >= 0 && newC < c) { // Validación de límites
+                                if (maz[newR][newC] == '1') {
                                     continue;
                                 }
-                                try {
-                                    if (maz[op.r + x][op.c + y] == '1') {
-                                        continue;
-                                    }
-                                } catch (Exception e) {
-                                    continue;
-                                }
-                                frontier.add(new Point(op.r + x, op.c + y, op));
+                                frontier.add(new Point(newR, newC, op));
                             }
                         }
                     }
                 }
-            } catch (Exception e) { // ignore NullPointer and ArrayIndexOutOfBounds
+            } catch (Exception e) {
+                System.out.println("Error al generar el laberinto: " + e.getMessage());
             }
 
-            // if algorithm has resolved, mark end node
-            if (frontier.isEmpty()) {
+            // si el algoritmo se resuelve, se marca el último nodo como final
+            if (frontier.isEmpty() && last != null) {
                 maz[last.r][last.c] = 'E';
             }
         }
@@ -92,7 +89,6 @@ public class Laberinto {
         for (int i = 0; i < r; i++) {
             String aux = "";
             for (int j = 0; j < c; j++) {
-                // System.out.print(maz[i][j]);
                 aux += maz[i][j] + ",";
             }
             aux = aux.substring(0, aux.length() - 1);
@@ -113,8 +109,8 @@ public class Laberinto {
             c = y;
             parent = p;
         }
-        // compute opposite node given that it is in the other direction from the parent
 
+        // Calcula el nodo opuesto dado que está en la otra dirección del padre
         public Point opposite() {
             if (this.r.compareTo(parent.r) != 0) {
                 return new Point(this.r + this.r.compareTo(parent.r), this.c, this);
@@ -211,9 +207,9 @@ public class Laberinto {
         return resultado_final.toString();
     }
 
-    // corrida
     public static void main(String[] args) {
-        Laberinto p = new Laberinto();
+        try {
+            Laberinto p = new Laberinto();
 
         System.out.println("=== Generando laberinto ===");
         String laberintoGenerado = p.generar(20, 20);
@@ -230,6 +226,10 @@ public class Laberinto {
         System.out.println("1 = Camino disponible");
         System.out.println("0 = Pared");
 
+        } catch (Exception e) {
+            System.out.println("Error durante la resoluciòn del laberinto: " + e.getMessage());
+        }
+        
     }
 
 }
