@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import com.practica.laberinto.base.controller.dataStruct.graphs.UndirectedLabelGraph;
 
 public class Laberinto {
-    public char[][] Laberinto(int r, int c) {
-        r = 100;
-        c = 100;
 
-        StringBuilder s = new StringBuilder();
+    public String generar(int r, int c) {
+        // dimensions of generated maze
+        // int r = 100, c = 100;
+
+        // build maze and initialize with only walls
+        StringBuilder s = new StringBuilder(c);
         for (int x = 0; x < c; x++) {
             s.append('0');
         }
@@ -17,10 +19,13 @@ public class Laberinto {
         for (int x = 0; x < r; x++) {
             maz[x] = s.toString().toCharArray();
         }
+
+        // select random point and open as start node
         Point st = new Point((int) (Math.random() * r), (int) (Math.random() * c), null);
         maz[st.r][st.c] = 'S';
 
-        ArrayList<Point> frontier = new ArrayList<>();
+        // iterate through direct neighbors of node
+        ArrayList<Point> frontier = new ArrayList<Point>();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0 || x != 0 && y != 0) {
@@ -37,6 +42,7 @@ public class Laberinto {
                 frontier.add(new Point(st.r + x, st.c + y, st));
             }
         }
+
         Point last = null;
         while (!frontier.isEmpty()) {
 
@@ -93,7 +99,7 @@ public class Laberinto {
             s.append(aux).append("\n");
         }
 
-        return maz;
+        return s.toString();
     }
 
     static class Point {
@@ -107,6 +113,7 @@ public class Laberinto {
             c = y;
             parent = p;
         }
+        // compute opposite node given that it is in the other direction from the parent
 
         public Point opposite() {
             if (this.r.compareTo(parent.r) != 0) {
@@ -119,36 +126,110 @@ public class Laberinto {
         }
     }
 
-    public static void imprimirLaberinto(char[][] matriz) {
-        for (int i = 0; i < matriz.length; i++) {
-            for (int j = 0; j < matriz[0].length; j++) {
-                System.out.print(matriz[i][j] + " ");
+    public String resolverLaberinto(String laberintoString) {
+        String[] lineas = laberintoString.trim().split("\n");
+        int r = lineas.length;
+        int c = lineas[0].split(",").length;
+
+        char[][] maz = new char[r][c];
+        for (int i = 0; i < r; i++) {
+            String[] celdas = lineas[i].split(",");
+            for (int j = 0; j < c; j++) {
+                maz[i][j] = celdas[j].charAt(0);
             }
-            System.out.println();
         }
+
+        int startR = -1, startC = -1, endR = -1, endC = -1;
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (maz[i][j] == 'S') {
+                    startR = i;
+                    startC = j;
+                }
+                if (maz[i][j] == 'E') {
+                    endR = i;
+                    endC = j;
+                }
+            }
+        }
+
+        if (startR == -1 || endR == -1) {
+            return "Error: No se encontraron puntos de inicio (S) o fin (E) en el laberinto";
+        }
+
+        UndirectedLabelGraph<String> graph = UndirectedLabelGraph.mazeToGraph(maz);
+
+        String startLabel = startR + "," + startC;
+        String endLabel = endR + "," + endC;
+        Integer startIdx = graph.getVertex(startLabel);
+        Integer endIdx = graph.getVertex(endLabel);
+
+        if (startIdx == null || endIdx == null) {
+            return "Error: No se pudieron encontrar los nodos de inicio o fin en el grafo";
+        }
+
+        float[][] matriz = graph.getMatrizAdyacencia();
+        Dijkstra.PathResult resultado = Dijkstra.dijkstra(matriz, startIdx);
+
+        if (resultado.distance.get(endIdx) == Float.POSITIVE_INFINITY) {
+            return "Error: No existe camino entre el inicio y el fin";
+        }
+
+        java.util.ArrayList<Integer> camino = new java.util.ArrayList<>();
+        int actual = endIdx;
+
+        while (actual != -1) {
+            camino.add(0, actual);
+            if (actual == startIdx)
+                break;
+            actual = resultado.predecessor.get(actual);
+        }
+
+        for (Integer idx : camino) {
+            String label = graph.getLabel(idx);
+            if (label != null) {
+                String[] partes = label.split(",");
+                int i = Integer.parseInt(partes[0]);
+                int j = Integer.parseInt(partes[1]);
+                if (maz[i][j] != 'S' && maz[i][j] != 'E') {
+                    maz[i][j] = '*';
+                }
+            }
+        }
+
+        StringBuilder resultado_final = new StringBuilder();
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                resultado_final.append(maz[i][j]);
+                if (j < c - 1) {
+                    resultado_final.append(",");
+                }
+            }
+            resultado_final.append("\n");
+        }
+
+        return resultado_final.toString();
     }
 
     // corrida
     public static void main(String[] args) {
         Laberinto p = new Laberinto();
-        char[][] matriz = p.Laberinto(20, 20);
-        imprimirLaberinto(matriz);
-        UndirectedLabelGraph<String> grafo = UndirectedLabelGraph.mazeToGraph(matriz);
-        float[][] matrizAdy = grafo.getMatrizAdyacencia();
-        Dijkstra.dijkstra(matrizAdy, 0);
-        // O la etiqueta para el fin
 
-        // System.out.println(grafo.toString());
+        System.out.println("=== Generando laberinto ===");
+        String laberintoGenerado = p.generar(20, 20);
+        System.out.println(laberintoGenerado);
 
-        /*
-         * System.out.println("matriz de adyacencia");
-         * for (int i = 0; i < matrizAdy.length; i++) {
-         * for (int j = 0; j < matrizAdy[0].length; j++) {
-         * System.out.print(matrizAdy[i][j] + " ");
-         * }
-         * System.out.println();
-         * }
-         */
+        System.out.println("=== Resolviendo laberinto con Dijkstra ===");
+        String laberintoResuelto = p.resolverLaberinto(laberintoGenerado);
+        System.out.println(laberintoResuelto);
+
+        System.out.println("=================");
+        System.out.println("S = Inicio");
+        System.out.println("E = Fin");
+        System.out.println("* = Camino más corto encontrado por Dijkstra");
+        System.out.println("1 = Camino disponible");
+        System.out.println("0 = Pared");
 
     }
+
 }

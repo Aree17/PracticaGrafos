@@ -66,8 +66,7 @@ public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
                         if (ni >= 0 && ni < rows && nj >= 0 && nj < cols && maze[ni][nj] != '0') {
                             int toIdx = index[ni][nj];
                             String toLabel = labels[toIdx];
-                            if (fromIdx < toIdx)
-                                graph.insert_label(fromLabel, toLabel, 1.0f);
+                            graph.insert_label(fromLabel, toLabel, 1.0f);
                         }
                     }
                 }
@@ -81,7 +80,7 @@ public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
         float[][] matriz = new float[n + 1][n + 1];
         for (int i = 0; i <= n; i++) {
             for (int j = 0; j <= n; j++) {
-                matriz[i][j] = (i == j) ? 0 : -1;
+                matriz[i][j] = (i == j) ? 0 : Float.POSITIVE_INFINITY;
             }
         }
         for (int i = 1; i <= n; i++) {
