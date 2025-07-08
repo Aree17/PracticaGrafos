@@ -56,7 +56,6 @@ public class Laberinto {
                     maz[cu.r][cu.c] = '1';
                     maz[op.r][op.c] = '1';
 
-                    // Agregar los puntos nuevos a la lista de caminos generados
                     caminosGenerados.add(new Point(cu.r, cu.c, null));
                     caminosGenerados.add(new Point(op.r, op.c, null));
 
@@ -81,7 +80,6 @@ public class Laberinto {
             }
         }
 
-        // Seleccionar punto final desde los caminos generados (excluyendo el inicio)
         Point puntoFinal = null;
         int intentos = 0;
         while (puntoFinal == null && intentos < 10) {
@@ -95,9 +93,8 @@ public class Laberinto {
             intentos++;
         }
 
-        // Si no se encontró un punto final válido, crear uno
+
         if (puntoFinal == null) {
-            // Buscar el punto más alejado del inicio
             int maxDistancia = 0;
             for (int i = 0; i < caminosGenerados.getLength(); i++) {
                 Point p = caminosGenerados.get(i);
@@ -111,7 +108,7 @@ public class Laberinto {
             }
         }
 
-        // Marcar el punto final
+
         maz[puntoFinal.r][puntoFinal.c] = 'E';
 
         // Construir el string resultado
@@ -182,7 +179,7 @@ public class Laberinto {
             return "Error: No se encontraron puntos de inicio (S) o fin (E) en el laberinto";
         }
     
-        // Marcar S y E como caminos transitables para el grafo
+
         maz[startR][startC] = '1';
         maz[endR][endC] = '1';
     
