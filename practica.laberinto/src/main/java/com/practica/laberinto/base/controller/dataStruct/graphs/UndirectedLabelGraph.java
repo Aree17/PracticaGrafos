@@ -1,5 +1,4 @@
 package com.practica.laberinto.base.controller.dataStruct.graphs;
-
 import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 
 public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
@@ -15,17 +14,6 @@ public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
             insert(getVertex(d), getVertex(o), weight);
         } else {
             throw new ArrayIndexOutOfBoundsException("Vertex origin o destiny index out ");
-        }
-    }
-
-    public void matriz(int row, int column) {
-        StringBuilder s = new StringBuilder(column);
-        for (int i = 0; i < column; i++) {
-            s.append('0');
-        }
-        char[][] maz = new char[row][column];
-        for (int x = 0; x < row; x++) {
-            maz[x] = s.toString().toCharArray();
         }
     }
 
