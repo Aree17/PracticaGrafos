@@ -197,31 +197,29 @@ private void addLast(E data){
         }
     }
 
-    public E delete(Integer pos) throws Exception {
-        if (isEmpty()) {
-            throw new ArrayIndexOutOfBoundsException("Lista vacía");
-        } else if (pos < 0 || pos >= length) {
-            throw new ArrayIndexOutOfBoundsException("Índice fuera de rango: " + pos);
-        } else if (pos == 0) {
+    public E delete(Integer pos) throws Exception{
+        if(isEmpty()){
+            throw new ArrayIndexOutOfBoundsException("Lista vacìa");
+        } else if(pos < 0 || pos >= length){
+            throw new ArrayIndexOutOfBoundsException("fuera de rango...");
+        } else if(pos==0){
             return deleteFirst();
-        } else if (pos == length - 1) {
+        }else if ((length.intValue()-1) == pos.intValue()){
             return deleteLast();
-        } else {
-            Node<E> preview = getNode(pos - 1);
-            Node<E> actual = preview.getNext();
-            Node<E> next = actual.getNext();
-    
+        }else{
+            Node<E> preview = getNode(pos-1);
+            Node<E> actualy = getNode(pos);
+            E element=preview.getData();
+            Node<E> next = actualy.getNext();
+            actualy=null;
             preview.setNext(next);
-            E element = actual.getData();
-    
-            // Ayuda al recolector de basura, aunque no es obligatorio
-            actual.setNext(null);
-    
             length--;
             return element;
         }
     }
-    
+
+
+
     public void clear(){
         head=null;
         last=null;

@@ -9,7 +9,7 @@ public class QueueImplementation<E> extends LinkedList<E> {
         return this.top;
     }
 
-    public QueueImplementation(Integer top) {
+    public QueueImplementation(Integer top){
         this.top = top;
     }
 
@@ -18,19 +18,14 @@ public class QueueImplementation<E> extends LinkedList<E> {
     }
 
     protected void queue(E info) throws Exception {
-        if (!isFullQueque()) {
+        if(!isFullQueque()) {
             add(info);
         } else {
             throw new ArrayIndexOutOfBoundsException("Queque full");
         }
     }
-
-    protected E dequeue() throws Exception {
+    protected E dequeue() throws Exception {       
         return deleteFirst();
-
-    }
-
-    public Boolean isEmpty() {
-        return getLength() == 0;
+        
     }
 }

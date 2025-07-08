@@ -35,8 +35,4 @@ public class Queue <E> {
     public Integer size() {
         return queue.getLength();
     }
-    
-    public Boolean isEmpty() {
-        return queue.isEmpty();
-    }
 }
