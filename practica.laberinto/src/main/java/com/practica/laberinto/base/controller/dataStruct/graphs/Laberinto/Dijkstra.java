@@ -2,6 +2,8 @@ package com.practica.laberinto.base.controller.dataStruct.graphs.Laberinto;
 
 import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 
+import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
+
 public class Dijkstra {
     static final int INF = Integer.MAX_VALUE;
 

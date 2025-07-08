@@ -1,5 +1,4 @@
 package com.practica.laberinto.base.controller.dataStruct.graphs;
-
 import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 
 public class UndirectedLabelGraph<E> extends DirectLabelGraph<E> {
