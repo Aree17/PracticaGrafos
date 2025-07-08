@@ -12,7 +12,7 @@ public class DirectedGraph<E> extends Graph {
         this.nro_edge = 0;
         list_adjacencies = new LinkedList[nro_vertex + 1];
         for (int i = 1; i <= nro_vertex; i++) {
-            list_adjacencies[i] = new LinkedList<>(); // por cada vertice se crea una lista de adyacencias
+            list_adjacencies[i] = new LinkedList<>(); 
         }
     }
 
@@ -43,14 +43,12 @@ public class DirectedGraph<E> extends Graph {
     @Override
     public Adjacency exist_edge(Integer o, Integer d) {
         Adjacency band = null;
-        if (o.intValue() <= nro_vertex.intValue() && d.intValue() <= nro_vertex.intValue()) { // que los vertives estan
-                                                                                              // bien
+        if (o.intValue() <= nro_vertex.intValue() && d.intValue() <= nro_vertex.intValue()) { 
             LinkedList<Adjacency> list = list_adjacencies[o];
             if (!list.isEmpty()) {
-                Adjacency[] matrix = list.toArray(); //// recorre las adyacencias
+                Adjacency[] matrix = list.toArray(); 
                 for (Adjacency adj : matrix) {
-                    if (adj.getDestiny().intValue() == d.intValue()) { // si el detino es igual ql destino que estoy
-                                                                       // buscando
+                    if (adj.getDestiny().intValue() == d.intValue()) { 
                         band = adj;
                         break;
                     }
@@ -82,7 +80,7 @@ public class DirectedGraph<E> extends Graph {
                 Adjacency aux = new Adjacency();
                 aux.setWeight(weight);
                 aux.setDestiny(d);
-                list_adjacencies[o].add(aux); //al vertice origen le voy a fijar la nueva adyacencia que estoy creando
+                list_adjacencies[o].add(aux); 
             }
         }else{
             throw new ArrayIndexOutOfBoundsException("Vertex origin o destiny index out ");
