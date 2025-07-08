@@ -176,7 +176,7 @@ public class Laberinto {
         }
     
         if (startR == -1 || endR == -1) {
-            return "Error: No se encontraron puntos de inicio (S) o fin (E) en el laberinto";
+            return "No se encontraron puntos de inicio o fin en el laberinto";
         }
     
 
@@ -191,14 +191,14 @@ public class Laberinto {
         Integer endIdx = graph.getVertex(endLabel);
     
         if (startIdx == null || endIdx == null) {
-            return "Error: No se pudieron encontrar los nodos de inicio o fin en el grafo";
+            return "No se pudieron encontrar los nodos de inicio o fin en el grafo";
         }
     
         float[][] matriz = graph.getMatrizAdyacencia();
         Dijkstra.PathResult resultado = Dijkstra.dijkstra(matriz, startIdx);
     
         if (resultado.distance.get(endIdx) == Float.POSITIVE_INFINITY) {
-            return "Error: No existe camino entre el inicio y el fin";
+            return "No existe camino entre el inicio y el fin";
         }
     
         LinkedList<Integer> camino = new LinkedList<>();
