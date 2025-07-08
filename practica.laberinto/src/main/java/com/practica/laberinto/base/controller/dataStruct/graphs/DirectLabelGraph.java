@@ -64,7 +64,6 @@ public class DirectLabelGraph<E> extends DirectedGraph<E>{
     }
 
     public E getLabel(Integer i){
-        //return dictVertex.get(i);
         return labels[i]; 
 
     }

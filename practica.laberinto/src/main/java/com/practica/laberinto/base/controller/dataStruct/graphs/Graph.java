@@ -5,7 +5,7 @@ import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 public abstract class Graph {
     public abstract Integer nro_vertex();
     public abstract Integer nro_edge();
-    public abstract Adjacency exist_edge(Integer o, Integer d);
+    public abstract Adjacency exist_edge(Integer o, Integer d); 
     public abstract Float wight_edge(Integer o, Integer d);
     public abstract void insert(Integer o, Integer d);
     public abstract void insert(Integer o, Integer d, Float weight);
