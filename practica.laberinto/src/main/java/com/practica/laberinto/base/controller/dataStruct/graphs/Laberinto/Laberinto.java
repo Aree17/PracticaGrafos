@@ -6,16 +6,24 @@ import com.practica.laberinto.base.controller.dataStruct.list.LinkedList;
 public class Laberinto {
 
     public String generar(int r, int c) throws Exception {
+<<<<<<< HEAD
         return generarInterno(r, c);
     }
 
     private String generarInterno(int r, int c) throws Exception {
         char[][] laberinto = new char[r][c];
+=======
+        char[][] maz = new char[r][c];
+>>>>>>> origin/develop
 
         // Inicializar laberinto con paredes
         for (int x = 0; x < r; x++) {
             for (int y = 0; y < c; y++) {
+<<<<<<< HEAD
                 laberinto[x][y] = '0';
+=======
+                maz[x][y] = '0';
+>>>>>>> origin/develop
             }
         }
 
@@ -23,12 +31,21 @@ public class Laberinto {
         Point st = new Point((int) (Math.random() * r), (int) (Math.random() * c), null);
         laberinto[st.r][st.c] = 'S';
 
+<<<<<<< HEAD
 
         LinkedList<Point> caminosGenerados = new LinkedList<>();
         caminosGenerados.add(st);
 
 
         LinkedList<Point> frontier = new LinkedList<>();
+=======
+        // Mantener una lista de todos los caminos generados
+        LinkedList<Point> caminosGenerados = new LinkedList<>();
+        caminosGenerados.add(st);
+
+        // Iterar a los vecinos cercanos al nodo inicial
+        LinkedList<Point> frontier = new LinkedList<Point>();
+>>>>>>> origin/develop
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
                 if (x == 0 && y == 0 || x != 0 && y != 0) {
@@ -37,7 +54,11 @@ public class Laberinto {
                 int newR = st.r + x;
                 int newC = st.c + y;
                 if (newR >= 0 && newR < r && newC >= 0 && newC < c) {
+<<<<<<< HEAD
                     if (laberinto[newR][newC] == '1') {
+=======
+                    if (maz[newR][newC] == '1') {
+>>>>>>> origin/develop
                         continue;
                     }
                     frontier.add(new Point(newR, newC, st));
@@ -51,11 +72,20 @@ public class Laberinto {
             try {
                 if (cu.r >= 0 && cu.r < r && cu.c >= 0 && cu.c < c &&
                         op.r >= 0 && op.r < r && op.c >= 0 && op.c < c &&
+<<<<<<< HEAD
                         laberinto[cu.r][cu.c] == '0' && laberinto[op.r][op.c] == '0') {
 
                     laberinto[cu.r][cu.c] = '1';
                     laberinto[op.r][op.c] = '1';
 
+=======
+                        maz[cu.r][cu.c] == '0' && maz[op.r][op.c] == '0') {
+
+                    maz[cu.r][cu.c] = '1';
+                    maz[op.r][op.c] = '1';
+
+                    // Agregar los puntos nuevos a la lista de caminos generados
+>>>>>>> origin/develop
                     caminosGenerados.add(new Point(cu.r, cu.c, null));
                     caminosGenerados.add(new Point(op.r, op.c, null));
 
@@ -67,7 +97,11 @@ public class Laberinto {
                             int newR = op.r + x;
                             int newC = op.c + y;
                             if (newR >= 0 && newR < r && newC >= 0 && newC < c) {
+<<<<<<< HEAD
                                 if (laberinto[newR][newC] == '1') {
+=======
+                                if (maz[newR][newC] == '1') {
+>>>>>>> origin/develop
                                     continue;
                                 }
                                 frontier.add(new Point(newR, newC, op));
@@ -80,6 +114,7 @@ public class Laberinto {
             }
         }
 
+<<<<<<< HEAD
         Point puntoFinal = null;
         int intentos = 0;
         while (puntoFinal == null && intentos < 10) {
@@ -103,12 +138,80 @@ public class Laberinto {
                         maxDistancia = distancia;
                         puntoFinal = p;
                     }
+=======
+        // Garantizar conectividad: Si no hay caminos generados suficientes, forzar
+        // conexión
+        if (caminosGenerados.getLength() < 2) {
+            // Crear un camino simple desde S hacia abajo y derecha
+            Point inicio = caminosGenerados.get(0);
+            for (int i = inicio.r + 1; i < r && i < inicio.r + 3; i++) {
+                if (i < r) {
+                    maz[i][inicio.c] = '1';
+                    caminosGenerados.add(new Point(i, inicio.c, null));
+                }
+            }
+            for (int j = inicio.c + 1; j < c && j < inicio.c + 3; j++) {
+                if (j < c) {
+                    maz[inicio.r][j] = '1';
+                    caminosGenerados.add(new Point(inicio.r, j, null));
+>>>>>>> origin/develop
                 }
             }
         }
 
+<<<<<<< HEAD
         // Marcar el punto final
         laberinto[puntoFinal.r][puntoFinal.c] = 'E';
+=======
+        // Seleccionar punto final desde los caminos generados (excluyendo el inicio)
+        Point puntoFinal = null;
+        int intentos = 0;
+        while (puntoFinal == null && intentos < 10) {
+            int indiceAleatorio = (int) (Math.random() * caminosGenerados.getLength());
+            Point candidato = caminosGenerados.get(indiceAleatorio);
+
+            // Asegurar que no sea el punto de inicio
+            if (candidato.r != st.r || candidato.c != st.c) {
+                puntoFinal = candidato;
+            }
+            intentos++;
+        }
+
+        // Si no se encontró un punto final válido, crear uno
+        if (puntoFinal == null) {
+            // Buscar el punto más alejado del inicio
+            int maxDistancia = 0;
+            for (int i = 0; i < caminosGenerados.getLength(); i++) {
+                Point p = caminosGenerados.get(i);
+                if (p.r != st.r || p.c != st.c) {
+                    int distancia = Math.abs(p.r - st.r) + Math.abs(p.c - st.c);
+                    if (distancia > maxDistancia) {
+                        maxDistancia = distancia;
+                        puntoFinal = p;
+                    }
+                }
+            }
+        }
+
+        // Si aún no hay punto final, crear uno forzado
+        if (puntoFinal == null) {
+            // Crear un punto final en la esquina opuesta si es posible
+            int finalR = r - 1;
+            int finalC = c - 1;
+
+            // Asegurar que haya un camino hasta el punto final
+            maz[finalR][finalC] = '1';
+            if (finalR > 0)
+                maz[finalR - 1][finalC] = '1';
+            if (finalC > 0)
+                maz[finalR][finalC - 1] = '1';
+
+            puntoFinal = new Point(finalR, finalC, null);
+        }
+
+        // Marcar el punto final
+        maz[puntoFinal.r][puntoFinal.c] = 'E';
+>>>>>>> origin/develop
 
         // Construir el string resultado
         StringBuilder s = new StringBuilder();
@@ -136,9 +239,15 @@ public class Laberinto {
             padre = p;
         }
 
+<<<<<<< HEAD
         public Point opuesto() {
             if (this.r.compareTo(padre.r) != 0) {
                 return new Point(this.r + this.r.compareTo(padre.r), this.c, this);
+=======
+        public Point opposite() {
+            if (this.r.compareTo(parent.r) != 0) {
+                return new Point(this.r + this.r.compareTo(parent.r), this.c, this);
+>>>>>>> origin/develop
             }
             if (this.c.compareTo(padre.c) != 0) {
                 return new Point(this.r, this.c + this.c.compareTo(padre.c), this);
@@ -198,7 +307,11 @@ public class Laberinto {
         if (resultado.distance.get(endIdx) == Float.POSITIVE_INFINITY) {
             return "No existe camino posible entre el inicio y el fin";
         }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> origin/develop
         LinkedList<Integer> camino = new LinkedList<>();
         int actual = endIdx;
         while (actual != -1) {
@@ -209,6 +322,7 @@ public class Laberinto {
                 break;
             actual = resultado.predecessor.get(actual);
         }
+<<<<<<< HEAD
     
         LinkedList<Integer> caminoInvertido = new LinkedList<>();
         for (int i = camino.getLength() - 1; i >= 0; i--) {
@@ -216,6 +330,9 @@ public class Laberinto {
         }
         camino = caminoInvertido;
     
+=======
+
+>>>>>>> origin/develop
         for (int i = 0; i < camino.getLength(); i++) {
             Integer idx = camino.get(i);
             String label = graph.getLabel(idx);
@@ -223,8 +340,13 @@ public class Laberinto {
                 String[] partes = label.split(",");
                 int fila = Integer.parseInt(partes[0]);
                 int columna = Integer.parseInt(partes[1]);
+<<<<<<< HEAD
                 if (laberinto[fila][columna] != 'S' && laberinto[fila][columna] != 'E') {
                     laberinto[fila][columna] = '*';
+=======
+                if (maz[fila][columna] != 'S' && maz[fila][columna] != 'E') {
+                    maz[fila][columna] = '*';
+>>>>>>> origin/develop
                 }
             }
         }
